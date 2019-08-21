@@ -1,9 +1,16 @@
 var express = require('express');
 var router = express.Router();
+const { Client } = require('pg');
+const client = new Client();
 
-/* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('respond with companies json array');
+	client.connect()
+	client
+	.query('SELECT * FROM companies')
+	.then(resdb => {
+		res.send(resdb.rows);
+	})
+	.catch(e => console.error(e.stack));
 });
 
 module.exports = router;
