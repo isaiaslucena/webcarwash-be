@@ -4,7 +4,7 @@ const { Client } = require('pg');
 const client = new Client();
 
 router.get('/', function(req, res, next) {
-	client.connect()
+	client.connect();
 	client
 	.query('SELECT * FROM companies')
 	.then(resdb => {

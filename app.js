@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
 	secret: process.env.SESSION_KEY,
-	resave: true,
+	resave: false,
 	saveUninitialized: true,
   duration: 30 * 60 * 1000,
   activeDuration: 5 * 60 * 1000,
