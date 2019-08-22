@@ -1,16 +1,21 @@
 var express = require('express');
 var router = express.Router();
-const { Client } = require('pg');
-const client = new Client();
+const { Pool, Client } = require('pg');
+const pool = new Pool();
 
 router.get('/', function(req, res, next) {
-	client.connect();
-	client
-	.query('SELECT * FROM users')
-	.then(resdb => {
+	pool.query('SELECT id,name,email FROM users', (err, resdb) => {
 		res.send(resdb.rows);
-	})
-	.catch(e => console.error(e.stack));
+		pool.end();
+	});
+});
+
+router.post('/create', function (req, res, next) {
+	console.log(req);
+	// pool.query('INSERT id,name,email FROM users', (err, resdb) => {
+	// 	res.send(resdb.rows);
+	// 	pool.end();
+	// });
 });
 
 module.exports = router;

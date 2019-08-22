@@ -1,16 +1,14 @@
 var express = require('express');
 var router = express.Router();
-const { Client } = require('pg');
-const client = new Client();
+const { Pool, Client } = require('pg');
+const pool = new Pool()
+
 
 router.get('/', function(req, res, next) {
-	client.connect();
-	client
-	.query('SELECT * FROM companies')
-	.then(resdb => {
+	pool.query('SELECT * FROM companies', (err, resdb) => {
 		res.send(resdb.rows);
-	})
-	.catch(e => console.error(e.stack));
+		pool.end();
+	});
 });
 
 module.exports = router;
