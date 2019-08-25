@@ -11,31 +11,26 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-	let caction = req.param('action');
+	let caction = req.body.action;
+	let cemail = req.body.email;
+	let cpass = req.body.pass;
 	switch (caction) {
 		case "login":
-			console.log("login paramenter requested via POST");
-			console.log(req);
+			pool.query("SELECT name, email, (password = crypt('" + cpass +"', password)) AS passwordmatch FROM users WHERE email = '"+cemail+"'", (err, resdb) => {
+				if (resdb.rows) {
+					res.send({ passwordmatch: resdb.rows[0].passwordmatch });
+				} else {
+					res.send({ passwordmatch: false });
+				}
+			});
 			break;
 		case "logout":
-			console.log("logout paramenter requested via POST");
-			console.log(req);
+			res.send("logout paramenter requested via POST");
 			break;
 		default:
 			break;
 	}
-	// pool.query('SELECT * FROM users WHERE email = 'isaiasneto@gmail.com' AND password = crypt('123', gen_salt('bf'))', (err, resdb) => {
-	// 	res.send(resdb.rows);
-	// 	pool.end();
-	// });
-});
 
-router.post('/create', function (req, res, next) {
-	console.log(req);
-	// pool.query('INSERT id,name,email FROM users', (err, resdb) => {
-	// 	res.send(resdb.rows);
-	// 	pool.end();
-	// });
 });
 
 module.exports = router;
